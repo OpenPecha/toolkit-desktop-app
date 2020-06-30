@@ -46,7 +46,12 @@ def main():
     export_parser = subs.add_parser(
         'Export', help='Export pecha in desirable format')
     export_parser.add_argument('Pehca ID')
-    parser.parse_args()
+    args = parser.parse_args()
+
+    if 'Pecha ID or Number' in args:
+        download(args)
+    elif "Update" in args:
+        update(args)
 
     display_message()
 
