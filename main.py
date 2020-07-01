@@ -2,11 +2,15 @@
 Simple Desktop app to use openpecha-toolkit CLI
 """
 
-import argparse
-
 from gooey import Gooey, GooeyParser
 
-running = True
+
+class cmd_names:
+    DOWNLOAD = "download"
+    APPLY_LAYER = "apply_layer"
+    EDIT = "edit"
+    UPDATE = "update"
+    EXPORT = "export"
 
 
 @Gooey(
@@ -20,7 +24,7 @@ def main():
     parser = GooeyParser()
     subs = parser.add_subparsers(help="commands", dest="command")
 
-    download_parser = subs.add_parser("download", prog="Download Pecha")
+    download_parser = subs.add_parser(cmd_names.DOWNLOAD, prog="Download Pecha")
     download_parser.add_argument(
         "pecha_id",
         metavar="Pecha ID/Number",
@@ -44,40 +48,64 @@ def main():
         help="directory to store all the pecha",
     )
 
-    layer_parser = subs.add_parser("apply_layer",)
+    layer_parser = subs.add_parser(cmd_names.APPLY_LAYER, prog="Apply Layer")
     layer_parser.add_argument(
         "pecha_id",
         metavar="Pecha ID/Number",
         help="Pecha ID like P0000001 or Number like 1",
     )
-    layer_parser.add_argument("--list", type=str)
+    layer_parser.add_argument("--layers", type=str)
+
+    edit_parser = subs.add_parser(cmd_names.EDIT, prog="Edit text")
+    edit_parser.add_argument(
+        "pecha_id",
+        metavar="Pecha ID/Number",
+        help="Pecha ID like P0000001 or Number like 1",
+    )
+    edit_parser.add_argument("--volume", help="Volume number")
+    edit_parser.add_argument("--text-id", help="ID of the text to be edited")
 
     update_parser = subs.add_parser(
-        "update", prog="Update Pecha", help=" update the base text with your edits"
+        cmd_names.UPDATE,
+        prog="Update Pecha",
+        help=" update the base text with your edits",
     )
-    update_parser.add_argument("File", widget="FileChooser")
+    update_parser.add_argument("Path to text", widget="FileChooser")
 
-    export_parser = subs.add_parser("Export", help="Export pecha in desirable format")
-    export_parser.add_argument("Pehca ID")
+    export_parser = subs.add_parser(
+        cmd_names.EXPORT, prog="Export Pecha", help="Export pecha in desirable format"
+    )
+    export_parser.add_argument(
+        "pecha_id",
+        metavar="Pecha ID/Number",
+        help="Pecha ID like P0000001 or Number like 1",
+    )
+    export_parser.add_argument(
+        "format",
+        metavar="File format",
+        widget="Dropdown",
+        choices=[".txt", ".epub", ".docx", ".pdf", ".md"],
+    )
 
     args = parser.parse_args()
     run(args)
 
 
 def run(args):
-    if args.command == "download":
-        print(f"downloading pecha {args.pecha_id}....")
+    if args.command == cmd_names.DOWNLOAD:
+        print(f"downloading pecha {args.pecha_id} ...")
         print(args)
         pass
-    elif args.command == "apply_layer":
-        # apply layers
+    elif args.command == cmd_names.APPLY_LAYER:
+        print(f"Applying layer for pecha {args.pecha_idi} ...")
         pass
-    elif args.command == "update":
-        # update the pecha
+    elif args.command == cmd_names.EDIT:
+        print(f"Edit Volume")
         pass
+    elif args.command == cmd_names.UPDATE:
+        print("Updating pecha")
     else:
-        # export pecha
-        pass
+        print("Export pecha")
 
 
 if __name__ == "__main__":

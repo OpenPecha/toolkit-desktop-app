@@ -2,3 +2,6 @@
 GooeyExamples/
 .vscode/
 video-converter/
+**/__pycache__
+build/
+dist/
